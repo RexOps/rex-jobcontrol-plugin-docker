@@ -39,7 +39,7 @@ sub create {
   );
 
   my $auth = $self->get_auth_data($host_node);
-  $self->project->app->ssh_pool->connect_to( $host_node->name, %{$auth} );
+  $self->project->app->ssh_pool->connect_to( ($host_node->data->{ip} || $host_node->name), %{$auth} );
 
   Rex::Commands::set( virtualization => 'Docker' );
 
@@ -62,7 +62,7 @@ sub remove {
   );
 
   my $auth = $self->get_auth_data($host_node);
-  $self->project->app->ssh_pool->connect_to( $host_node->name, %{$auth} );
+  $self->project->app->ssh_pool->connect_to( ($host_node->data->{ip} || $host_node->name), %{$auth} );
 
   Rex::Commands::set( virtualization => 'Docker' );
 
@@ -84,7 +84,7 @@ sub get_data {
   );
 
   my $auth = $self->get_auth_data($host_node);
-  $self->project->app->ssh_pool->connect_to( $host_node->name, %{$auth} );
+  $self->project->app->ssh_pool->connect_to( ($host_node->data->{ip} || $host_node->name), %{$auth} );
 
   Rex::Commands::set( virtualization => 'Docker' );
 
