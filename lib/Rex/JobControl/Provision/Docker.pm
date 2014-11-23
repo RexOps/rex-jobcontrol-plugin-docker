@@ -47,10 +47,10 @@ sub create {
   Rex::Commands::set( virtualization => 'Docker' );
 
   my $id = vm
-    create       => $self->name,
-    image        => $self->image,
-    command      => $self->command,
-    share_folder => $self->volumes;
+    create  => $self->name,
+    image   => $self->image,
+    command => $self->command,
+    ( $self->volumes ? ( share_folder => $self->volumes ) : () );
 
   $self->project->app->log->debug("Created new docker container: $id");
 
