@@ -39,7 +39,9 @@ sub create {
   );
 
   my $auth = $self->get_auth_data($host_node);
-  $self->project->app->ssh_pool->connect_to( ($host_node->data->{ip} || $host_node->name), %{$auth} );
+  $self->project->app->ssh_pool->connect_to(
+    ( $host_node->data->{ip} || $host_node->name ),
+    %{$auth}, port => ( $host_node->data->{ssh_port} || 22 ) );
 
   Rex::Commands::set( virtualization => 'Docker' );
 
@@ -54,7 +56,7 @@ sub create {
 }
 
 sub remove {
-  my ( $self ) = @_;
+  my ($self) = @_;
 
   my $host_node = Rex::JobControl::Helper::Project::Node->new(
     node_id => $self->host,
@@ -62,7 +64,10 @@ sub remove {
   );
 
   my $auth = $self->get_auth_data($host_node);
-  $self->project->app->ssh_pool->connect_to( ($host_node->data->{ip} || $host_node->name), %{$auth} );
+  $self->project->app->ssh_pool->connect_to(
+    ( $host_node->data->{ip} || $host_node->name ),
+    %{$auth}, port => ( $host_node->data->{ssh_port} || 22 ) );
+
 
   Rex::Commands::set( virtualization => 'Docker' );
 
@@ -84,7 +89,10 @@ sub get_data {
   );
 
   my $auth = $self->get_auth_data($host_node);
-  $self->project->app->ssh_pool->connect_to( ($host_node->data->{ip} || $host_node->name), %{$auth} );
+  $self->project->app->ssh_pool->connect_to(
+    ( $host_node->data->{ip} || $host_node->name ),
+    %{$auth}, port => ( $host_node->data->{ssh_port} || 22 ) );
+
 
   Rex::Commands::set( virtualization => 'Docker' );
 
