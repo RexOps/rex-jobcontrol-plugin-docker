@@ -27,6 +27,7 @@ has host      => ( is => 'ro' );
 has name      => ( is => 'ro' );
 has command   => ( is => 'ro' );
 has docker_id => ( is => 'ro' );
+has volumes   => ( is => 'ro' );
 
 sub create {
   my ($self) = @_;
@@ -46,9 +47,10 @@ sub create {
   Rex::Commands::set( virtualization => 'Docker' );
 
   my $id = vm
-    create  => $self->name,
-    image   => $self->image,
-    command => $self->command;
+    create       => $self->name,
+    image        => $self->image,
+    command      => $self->command,
+    share_folder => $self->volumes;
 
   $self->project->app->log->debug("Created new docker container: $id");
 
@@ -67,7 +69,6 @@ sub remove {
   $self->project->app->ssh_pool->connect_to(
     ( $host_node->data->{ip} || $host_node->name ),
     %{$auth}, port => ( $host_node->data->{ssh_port} || 22 ) );
-
 
   Rex::Commands::set( virtualization => 'Docker' );
 
@@ -92,7 +93,6 @@ sub get_data {
   $self->project->app->ssh_pool->connect_to(
     ( $host_node->data->{ip} || $host_node->name ),
     %{$auth}, port => ( $host_node->data->{ssh_port} || 22 ) );
-
 
   Rex::Commands::set( virtualization => 'Docker' );
 
